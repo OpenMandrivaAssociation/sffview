@@ -13,6 +13,7 @@ Patch0:		sffview-cflags.diff
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 BuildRequires:	wxGTK2.6-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
 The CAPI interface for programming ISDN hardware expects and gives you faxes in
