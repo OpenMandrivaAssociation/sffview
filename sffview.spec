@@ -49,17 +49,6 @@ install -d %{buildroot}%{_bindir}
 install -m0755 %{name} %{buildroot}%{_bindir}
 
 # menu
-install -d %{buildroot}%{_menudir}
-cat > %{buildroot}%{_menudir}/%{name} <<EOF
-?package(%{name}): \
-command="%{name}" \
-title="SffView" \
-longtitle="%{summary}" \
-needs="x11" \
-icon="%{name}.png" \
-section="Multimedia/Graphics" \
-xdg="true"
-EOF
 
 # icon
 install -d %{buildroot}%{_liconsdir}
@@ -98,7 +87,6 @@ EOF
 %defattr(-,root,root)
 %doc doc/* testfax.sff
 %{_bindir}/%{name}
-%{_menudir}/%{name}
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
 %{_liconsdir}/%{name}.png
