@@ -72,13 +72,17 @@ Type=Application
 Categories=Graphics;X-MandrivaLinux-Multimedia-Graphics;
 EOF
 
+%if %mdkversion < 200900
 %post
 %update_menus
 %update_desktop_database
+%endif
 
+%if %mdkversion < 200900
 %postun
 %clean_menus
 %clean_desktop_database
+%endif
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
