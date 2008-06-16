@@ -1,7 +1,7 @@
 Summary:	A program to view structured fax files (sff)
 Name:		sffview
 Version:	0.4
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	MIT
 Group:		Communications
 URL:		http://sfftools.sourceforge.net/sffview.html
