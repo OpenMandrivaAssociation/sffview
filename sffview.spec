@@ -1,7 +1,7 @@
 Summary:	A program to view structured fax files (sff)
 Name:		sffview
 Version:	0.4
-Release:	%mkrel 3
+Release:	%mkrel 2
 License:	MIT
 Group:		Communications
 URL:		http://sfftools.sourceforge.net/sffview.html
@@ -10,9 +10,16 @@ Source1:	sffview-16x16.png
 Source2:	sffview-32x32.png
 Source3:	sffview-48x48.png
 Patch0:		sffview-cflags.diff
+# Fix build with GCC 4.3 - AdamW 2008/12
+Patch1:		sffview-0.4-gcc43.patch
+# From upstream CVS: fix code to work with unicode wx - AdamW 2008/12
+Patch2:		sffview-0.4-wx_unicode.patch
+# From upstream CVS: don't apply a workaround with newer wx versions
+# where it's not needed (like ours) - AdamW 2008/12
+Patch3:		sffview-0.4-restrict_fix.patch
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
-BuildRequires:	wxGTK2.6-devel
+BuildRequires:	wxgtku-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}
 
 %description
@@ -32,14 +39,17 @@ Authors:
 
 %setup -q -n %{name}
 %patch0 -p0
+%patch1 -p1 -b .gcc43
+%patch2 -p0 -b .unicode
+%patch3 -p0 -b .restrict
 
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
 
 %build
 
 %make \
-    WXCONFIG_CPP="\`wx-config-ansi --cflags\`" \
-    WXCONFIG_LD="\`wx-config-ansi --libs\`" \
+    WXCONFIG_CPP="\`wx-config-unicode --cflags\`" \
+    WXCONFIG_LD="\`wx-config-unicode --libs\`" \
     CFLAGS="%{optflags} -Wall"
 
 %install
@@ -48,16 +58,12 @@ cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
 install -d %{buildroot}%{_bindir}
 install -m0755 %{name} %{buildroot}%{_bindir}
 
-# menu
-
 # icon
-install -d %{buildroot}%{_liconsdir}
-install -d %{buildroot}%{_miconsdir}
-install -d %{buildroot}%{_iconsdir}
+install -d %{buildroot}%{_iconsdir}/hicolor/{16x16,32x32,48x48}/apps
 
-install -m0644 sffview-48x48.png %{buildroot}%{_liconsdir}/%{name}.png
-install -m0644 sffview-32x32.png %{buildroot}%{_iconsdir}/%{name}.png
-install -m0644 sffview-16x16.png %{buildroot}%{_miconsdir}/%{name}.png
+install -m0644 sffview-48x48.png %{buildroot}%{_iconsdir}/hicolor/48x48/apps/%{name}.png
+install -m0644 sffview-32x32.png %{buildroot}%{_iconsdir}/hicolor/32x32/apps/%{name}.png
+install -m0644 sffview-16x16.png %{buildroot}%{_iconsdir}/hicolor/16x16/apps/%{name}.png
 
 # XDG menu
 install -d %{buildroot}%{_datadir}/applications
@@ -69,7 +75,7 @@ Exec=%{name}
 Icon=%{name}
 Terminal=false
 Type=Application
-Categories=Graphics;X-MandrivaLinux-Multimedia-Graphics;
+Categories=Graphics;2DGraphics;Viewer;
 EOF
 
 %if %mdkversion < 200900
@@ -91,9 +97,6 @@ EOF
 %defattr(-,root,root)
 %doc doc/* testfax.sff
 %{_bindir}/%{name}
-%{_iconsdir}/%{name}.png
-%{_miconsdir}/%{name}.png
-%{_liconsdir}/%{name}.png
+%{_iconsdir}/hicolor/*/apps/%{name}.png
 %{_datadir}/applications/*.desktop
-
 
