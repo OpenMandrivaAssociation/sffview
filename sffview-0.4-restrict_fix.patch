@@ -1,0 +1,21 @@
+--- sffview.cpp	2007/03/06 18:18:59	1.4
++++ sffview.cpp	2008/01/30 07:26:38	1.5
+@@ -139,6 +139,7 @@
+ 	// the mapping mode while blitting. This seems to be badly horked
+ 	// currently (wxGTK 2.5.2)
+ 	dc->SetUserScale(m_nZoom, m_nZoom);
++#if defined(__WXGTK__) && (wxVERSION_NUMBER < 2600)
+ 	if (m_nZoom != 1) {
+ 		// Strange misbehaviour of wxGTK -> if we blit zoomed, the colours
+ 		// get inversed ??!? Workaround: wxSRC_INVERT
+@@ -146,6 +147,9 @@
+ 	} else {
+ 		dc->Blit(0,0,m_nBitmapWidth,m_nBitmapHeight,m_pMemDC,0,0,wxCOPY);
+ 	}
++#else
++	dc->Blit(0,0,m_nBitmapWidth,m_nBitmapHeight,m_pMemDC,0,0,wxCOPY);
++#endif
+ }
+ 
+ void SffView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
+
