@@ -4,7 +4,7 @@ Version:	0.4
 Release:	%mkrel 3
 License:	MIT
 Group:		Communications
-URL:		http://sfftools.sourceforge.net/sffview.html
+URL:		https://sfftools.sourceforge.net/sffview.html
 Source0:	sffview_0_4_src.zip
 Source1:	sffview-16x16.png
 Source2:	sffview-32x32.png
